@@ -4,110 +4,78 @@
 # Памʼятайте про чистоту і простоту коду (DRY, KISS), коментарі та докстрінги.
 import random
 
-def computer_random_number():
-    return random.randint(1, 5)
 
-computer_number = computer_random_number()
+class Computer:
+    def computer_random_number(self):
+        return random.randint(1, 5)
 
-def cycle_user_input():
-    max_attempts = 3
-    attempts = 0
 
-    while attempts < max_attempts:
-        try:
-            user_input = input(
-                'Enter a number from 1 to 5.\nWhere:\n1 - scissors \n2 - paper \n3 - stone \n4 - lizard \n5 - Spock\n ')
-
-            if user_input.isdigit():
-                user_input = int(user_input)
-
-                if 1 <= user_input <= 5:
-                    return user_input
+class User:
+    def cycle_user_input(self):
+        max_attempts = 3
+        attempts = 0
+        while attempts <= max_attempts:
+            try:
+                user_input = input(
+                    'Enter a number from 1 to 5.\nWhere:\n1 - scissors \n2 - paper \n3 - stone \n4 - lizard \n5 - Spock\n ')
+                if user_input.isdigit():
+                    user_input = int(user_input)
+                    if 1 <= user_input <= 5:
+                        return user_input
+                    else:
+                        print('Wrong! Enter a number between 1 and 5.')
+                        attempts += 1
                 else:
-                    print('Wrong! Enter a number between 1 and 5.')
-                    attempts += 1
-            else:
-                print('Wrong! Enter a NUMBER!')
-            attempts += 1
-            remaining_attempts = max_attempts - attempts
-            print(f"Remaining attempts: {remaining_attempts}")
+                    print('Wrong! Enter a NUMBER!')
+                attempts += 1
+                remaining_attempts = max_attempts - attempts
+                print(f"Remaining attempts: {remaining_attempts}")
+            except ValueError:
+                print("Enter a valid number from 1 to 5")
+        print("Exceeded maximum attempts")
+        exit()
 
-        except ValueError:
-            print("Enter a valid number from 1 to 5")
-    print("Exceeded maximum attempts")
-    exit()
 
-user_number = cycle_user_input()
+class Game:
+    def __init__(self, computer_number, user_number):
+        self.computer_number = computer_number
+        self.user_number = user_number
 
-def comparison_loop(computer_number, user_input):
-    while computer_number == user_input:
-        print("You and your opponent chose the same numbers. You need to make a choice again.")
-        user_input = cycle_user_input()
-        computer_number = computer_random_number()
-    return game(computer_number=computer_number, user_input=user_number)
+    def Rules_of_the_Game(self):
+        self.dict_characters = {
+            1: ['Scissors'],
+            2: ['Paper'],
+            3: ['Rock'],
+            4: ['Lizard'],
+            5: ['Spock']
+        }
 
-def game(computer_number, user_input):
-    if computer_number == user_number:
-        comparison_loop(computer_number=computer_number, user_input=user_number)
-    elif computer_number == 1 and user_number == 2:
-        print("GAME OVER! You lost! Scissors cut the paper.")
-        return None
-    elif computer_number == 1 and user_number == 3:
-        print("GAME OVER! You won! The stone broke the scissors.")
-        return None
-    elif computer_number == 1 and user_number == 4:
-        print("GAME OVER! You lost! The scissors cut off the head of your Lizard.")
-        return None
-    elif computer_number == 1 and user_number == 5:
-        print("GAME OVER! You won! Spock smashes scissors")
-        return None
-    elif computer_number == 2 and user_number == 1:
-        print("GAME OVER! You won! Your scissors cut the paper.")
-        return None
-    elif computer_number == 2 and user_number == 3:
-        print("GAME OVER! You lost! Your stone was covered with your opponent's paper.")
-        return None
-    elif computer_number == 2 and user_number == 4:
-        print("GAME OVER! You won! Your Lizard has eaten your opponent's paper.")
-        return None
-    elif computer_number == 2 and user_number == 5:
-        print("GAME OVER! You lost! Paper disproves Spock.")
-        return None
-    elif computer_number == 3 and user_number == 1:
-        print("GAME OVER! You lost! Your scissors were broken by your opponent's stone.")
-        return None
-    elif computer_number == 3 and user_number == 2:
-        print("GAME OVER! Your choice brought you victory! The paper covers the stone.")
-        return None
-    elif computer_number == 3 and user_number == 4:
-        print("GAME OVER! You won! Lizard eats paper.")
-        return None
-    elif computer_number == 3 and user_number == 5:
-        print("GAME OVER! You won! Spock vaporizes rock.")
-        return None
-    elif computer_number == 4 and user_number == 1:
-        print("GAME OVER! Your choice brings you victory! With your scissors you cut off the head of your opponent's Lizard.")
-        return None
-    elif computer_number == 4 and user_number == 2:
-        print("GAME OVER! Your choice brought you defeat! The paper was eaten by an enemy Lizard.")
-        return None
-    elif computer_number == 4 and user_number == 3:
-        print("GAME OVER! Your choice brought you victory! The stone crushed the Lizard.")
-        return None
-    elif computer_number == 4 and user_number == 5:
-        print("GAME OVER! You lost! Lizard poisons Spock")
-        return None
-    elif computer_number == 5 and user_number == 1:
-        print("GAME OVER! You lost! Spock smashes scissors.")
-        return None
-    elif computer_number == 5 and user_number == 2:
-        print("GAME OVER! You won! Paper disproves Spock.")
-        return None
-    elif computer_number == 5 and user_number == 3:
-        print("GAME OVER! You lost! Spock vaporizes rock.")
-        return None
-    elif computer_number == 5 and user_number == 4:
-        print("GAME OVER! You won! Lizard poisons Spock.")
-        return None
+        self.dict_Game = {
+            1: ['2', '4'],
+            2: ['3', '5'],
+            3: ['4', '1'],
+            4: ['5', '2'],
+            5: ['1', '3']
+        }
 
-game(computer_number=computer_number, user_input=user_number)
+        while self.computer_number == self.user_number:
+            print("You and your opponent chose the same numbers. You need to make a choice again.")
+            self.computer_number = Computer().computer_random_number()
+            self.user_number = User().cycle_user_input()
+
+        for value in self.dict_Game[self.user_number]:
+            pass
+        if value == str(self.computer_number):
+            print(f'Victory! Your character {self.dict_characters[self.user_number]} defeated{self.dict_characters[self.computer_number]}.')
+        else:
+            print(f'Defeat!Your character {self.dict_characters[self.user_number]} was destroyed by an enemy character{self.dict_characters[self.computer_number]}')
+
+
+computer_1 = Computer()
+computer_number = computer_1.computer_random_number()
+
+user_1 = User()
+user_number = user_1.cycle_user_input()
+
+game_1 = Game(computer_number=computer_number, user_number=user_number)
+game_1.Rules_of_the_Game()
